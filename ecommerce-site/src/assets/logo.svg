@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="163.854" height="44.748" viewBox="0 0 163.854 44.748">
+  <g id="Group_17735" data-name="Group 17735" transform="translate(-331.977 -86.719)">
+    <g id="Group_17718" data-name="Group 17718" transform="translate(390.832 86.719)">
+      <text id="Safe_Bag" data-name="Safe Bag" transform="translate(52 22)" fill="#fff" font-size="21" font-family="Jost-Bold, Jost" font-weight="700"><tspan x="-52" y="0">SAFE BAG</tspan></text>
+      <text id="Slogan_Here" data-name="Slogan Here" transform="translate(35 41.256)" fill="#fff" font-size="10" font-family="Montserrat-SemiBold, Montserrat" font-weight="600" letter-spacing="0.064em"><tspan x="-34" y="0">Slogan Here</tspan></text>
+    </g>
+    <g id="Group_17720" data-name="Group 17720" transform="translate(331.977 86.719)">
+      <g id="Group_17719" data-name="Group 17719" transform="translate(0)">
+        <path id="Path_36344" data-name="Path 36344" d="M319.845,77.585h6.5a.023.023,0,0,1,.022.02l1.3,11.992,4.453-5.252-1.269-11.731a.023.023,0,0,0-.022-.02h-15.03a.022.022,0,0,0-.018.037l4.052,4.947A.022.022,0,0,0,319.845,77.585Z" transform="translate(-315.771 -72.593)" fill="#fff"/>
+        <path id="Path_36345" data-name="Path 36345" d="M370.236,90.574h-6.3V95.56c.653,0,4.265.007,4.271.007h2.355a7.654,7.654,0,0,1,7.637,8.011,7.807,7.807,0,0,1-7.88,7.281H357.285l-3.815,4.374a11.7,11.7,0,0,0,3.729.619h13.364a12.641,12.641,0,1,0-.327-25.277Z" transform="translate(-332.812 -80.721)" fill="#fff"/>
+      </g>
+      <circle id="Ellipse_1" data-name="Ellipse 1" cx="4.051" cy="4.051" r="4.051" transform="translate(20.258 36.646)" fill="#fff"/>
+      <circle id="Ellipse_2" data-name="Ellipse 2" cx="4.051" cy="4.051" r="4.051" transform="translate(37.339 36.646)" fill="#fff"/>
+      <circle id="Ellipse_10469" data-name="Ellipse 10469" cx="2.051" cy="2.051" r="2.051" transform="translate(39.339 38.646)" fill="#347758"/>
+      <circle id="Ellipse_10470" data-name="Ellipse 10470" cx="2.051" cy="2.051" r="2.051" transform="translate(22.258 38.646)" fill="#347758"/>
+      <path id="Path_36346" data-name="Path 36346" d="M338.365,92.586l-12.01,14.165a1.9,1.9,0,0,0,.19,2.648l8.514,7.527a1.9,1.9,0,0,0,2.685-.174l12.514-14.344L350.34,91.9a1.238,1.238,0,0,0-1.46-1.227Zm8.124,4.779a1.633,1.633,0,1,1,1.282-1.282A1.634,1.634,0,0,1,346.489,97.365Z" transform="translate(-320.352 -80.756)" fill="#fff"/>
+    </g>
+  </g>
+</svg>
