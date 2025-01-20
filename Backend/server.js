@@ -12,6 +12,7 @@ const snacksRoute = require("./routes/snacksRoute");
 const blogRoutes = require("./routes/blogRoutes");
 const adminRoute = require("./routes/adminRoute");
 const fruitRoutes = require("./routes/fruitRoutes");
+const dairyBreadEggsRoutes = require("./routes/dairyBreadEggsRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api", snacksRoute);
 app.use("/api", blogRoutes);
 app.use("/api", adminRoute);
 app.use("/api", fruitRoutes);
+app.use("/api", dairyBreadEggsRoutes);
 
 app.use(errorMiddleware);
 app.use("/uploads", express.static("uploads"));
