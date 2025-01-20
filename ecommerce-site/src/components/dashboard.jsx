@@ -67,7 +67,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-64 bg-blue-600 text-white">
+      <div className="w-64 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white">
         <div className="h-16 flex items-center justify-center border-b border-blue-700">
           <h2 className="text-2xl font-semibold">Admin Dashboard</h2>
         </div>
@@ -88,27 +88,28 @@ const AdminDashboard = () => {
           <div>
             <button
               onClick={toggleProductDropdown}
-              className="w-full text-left px-4 py-2 text-white hover:bg-blue-700"
+              className="flex justify-between items-center w-full text-left px-4 py-2 text-white hover:bg-blue-700"
             >
               Products
+              <p className={`${isProductDropdownOpen ? 'rotate-45' : '' } font-bold text-xl transition-all my-auto`}>+</p>
             </button>
             {isProductDropdownOpen && (
-              <div className="bg-blue-700 text-white pl-4">
+              <div className="text-white pl-0">
                 <p
-                  className="py-2 cursor-pointer"
+                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
                   onClick={() => handleCategoryClick("Fruit & Vegetables")}
                 >
-                  Fruit & Vegetables
+                  Fruits & Vegetables
                 </p>
                 <p
-                  className="py-2 cursor-pointer"
+                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
                   onClick={() => handleCategoryClick("Dairy, Bread & Eggs")}
                 >
                   Dairy, Bread & Eggs
                 </p>
-                <p className="py-2">Chicken, Meat & Fish</p>
-                <p className="py-2">Pet Food</p>
-                <p className="py-2">Cold Drinks & Juices</p>
+                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Chicken, Meat & Fish</p>
+                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Pet Food</p>
+                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Cold Drinks & Juices</p>
               </div>
             )}
           </div>
@@ -131,7 +132,7 @@ const AdminDashboard = () => {
             </p>
           </div>
           <button
-            className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+            className="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 hover:bg-gradient-to-tl text-white py-2 px-4 rounded-lg"
             onClick={() => {
               localStorage.removeItem("token");
               window.location.href = "/admin";
