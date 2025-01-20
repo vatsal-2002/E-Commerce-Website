@@ -6,34 +6,25 @@ const {
 const upload = require("../config/multer");
 const {
   createItem,
-  getAllItems,
-  getItemById,
   updateItem,
-  deleteItem,
-} = require("../controllers/dairyBreadEggsController");
+} = require("../controllers/chickenMeatFishController");
 
 const router = express.Router();
 
 router.post(
-  "/admincreateitem",
+  "/admincreateMeat",
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
   createItem
 );
 
-router.get("/adminallitem", authMiddleware, getAllItems);
-
-router.get("/admingetoneitem/:id", authMiddleware, getItemById);
-
 router.put(
-  "/adminupdateitem/:id",
+  "/adminupdateMeat/:id",
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
   updateItem
 );
-
-router.delete("/admindeleteitem/:id", authMiddleware, adminMiddleware, deleteItem);
 
 module.exports = router;

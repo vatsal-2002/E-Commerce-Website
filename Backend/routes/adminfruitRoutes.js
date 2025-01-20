@@ -22,9 +22,9 @@ router.post(
   createFruit
 );
 
-router.get("/adminfruit", authMiddleware, getAllFruits);
+router.get("/adminfruit", getAllFruits);
 
-router.get("/adminfruit/:id", authMiddleware, getFruitById);
+router.get("/adminfruit/:id", getFruitById);
 
 router.put(
   "/adminfruit/:id",
