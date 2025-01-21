@@ -14,6 +14,7 @@ const adminRoute = require("./routes/adminRoute");
 const fruitRoutes = require("./routes/adminfruitRoutes");
 const dairyBreadEggsRoutes = require("./routes/admindairyBreadEggsRoutes");
 const chickenMeatFishRoutes = require("./routes/adminchickenMeatFishRoutes");
+const adminPetFoodRoutes = require("./routes/adminPetFoodRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -35,6 +36,7 @@ app.use("/api", adminRoute);
 app.use("/api", fruitRoutes);
 app.use("/api", dairyBreadEggsRoutes);
 app.use("/api", chickenMeatFishRoutes);
+app.use("/api", adminPetFoodRoutes);
 
 app.use(errorMiddleware);
 app.use("/uploads", express.static("uploads"));
