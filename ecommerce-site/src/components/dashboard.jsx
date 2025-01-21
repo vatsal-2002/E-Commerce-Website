@@ -63,7 +63,78 @@ const AdminDashboard = () => {
         image: "/path/to/eggs.jpg",
       },
     ],
+    "Chicken, Meat & Fish": [
+      {
+        title: "Chicken lolipop",
+        weight: "100 g",
+        price: "$3.50",
+        image: "/path/to/chicken.jpg",
+      },
+      {
+        title: "Hotdog",
+        weight: "1 pcs",
+        price: "$2.00",
+        image: "/path/to/hotdog.jpg",
+      },
+      {
+        title: "Salmon",
+        weight: "200 g",
+        price: "$4.50",
+        image: "/path/to/salmon.jpg",
+      }
+    ],
+    "Pet Food": [
+      {
+        title: "Dog food",
+        weight: "500 g",
+        price: "$20.00",
+        image: "/path/to/dogfood.jpg"
+      },
+      {
+        title: "Cat food",
+        weight: "500 g",
+        price: "$23.00",
+        image: "/path/to/catfood.jpg"
+      },
+      {
+        title: "Bird food",
+        weight: "200 g",
+        price: "$10.00",
+        image: "/path/to/birdfood.jpg"
+      },
+      {
+        title: "Fish food",
+        weight: "100 g",
+        price: "$10.00",
+        image: "/path/to/fishfood.jpg"
+      }
+    ],
+    "Cold Drinks & Juices": [
+      {
+        title: "Coca cola",
+        weight: "150 ml",
+        price: "$6.50",
+        image: "/path/to/cocacola.jpg"
+      },
+      {
+        title: "Sprite",
+        weight: "150 ml",
+        price: "$6.50",
+        image: "/path/to/sprite.jpg"
+      },
+      {
+        title: "Mix fruite",
+        weight: "200 ml",
+        price: "$10.00",
+        image: "/path/to/mixfruite.jpg"
+      },
+    ]
   };
+
+  const productsArray = Object.entries(products).map(([category, items]) => ({
+    category,
+    items,
+  }));
 
   return (
     <div className="flex h-screen">
@@ -107,9 +178,24 @@ const AdminDashboard = () => {
                 >
                   Dairy, Bread & Eggs
                 </p>
-                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Chicken, Meat & Fish</p>
-                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Pet Food</p>
-                <p className="py-2 pl-6 cursor-pointer hover:bg-blue-700">Cold Drinks & Juices</p>
+                <p 
+                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleCategoryClick("Chicken, Meat & Fish")}                
+                >
+                  Chicken, Meat & Fish
+                </p>
+                <p 
+                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleCategoryClick("Pet Food")}
+                >
+                  Pet Food
+                </p>
+                <p 
+                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
+                  onClick={() => handleCategoryClick("Cold Drinks & Juices")}
+                >
+                  Cold Drinks & Juices
+                </p>
               </div>
             )}
           </div>
@@ -142,13 +228,25 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {selectedCategory && (
+        {selectedCategory ? (
           <ProductTable
             category={selectedCategory}
             products={products[selectedCategory]}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
+        ) : (
+          <>
+          <p className="font-semibold text-2xl py-5">Product Categories</p>
+          <div className="grid grid-cols-3 gap-3">
+            {productsArray.map((categories, index)=>(
+              <div className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg" key={index}> 
+                <p className="font-semibold text-xl">{categories.category}</p>
+                <p>Total products: {categories.items.length}</p>
+              </div>
+            ))}
+          </div>
+          </>
         )}
       </div>
     </div>
