@@ -20,6 +20,30 @@ const createItem = async (req, res) => {
   }
 };
 
+// Get all Chicken, Meat & Fish items
+const getAllItems = async (req, res) => {
+  try {
+    const items = await ChickenMeatFish.find();
+    res.status(200).json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Get item by ID
+const getItemById = async (req, res) => {
+  try {
+    const item = await ChickenMeatFish.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    res.status(200).json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Update a Chicken, Meat & Fish item by ID
 const updateItem = async (req, res) => {
   try {
@@ -47,7 +71,24 @@ const updateItem = async (req, res) => {
   }
 };
 
+// Delete a Chicken, Meat & Fish item by ID
+const deleteItem = async (req, res) => {
+  try {
+    const deletedItem = await ChickenMeatFish.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ error: "Item not found" });
+    }
+
+    res.status(200).json({ message: "Item deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   createItem,
+  getAllItems,
+  getItemById,
   updateItem,
+  deleteItem,
 };
