@@ -5,7 +5,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
   return (
     <div>
       <h3 className="text-2xl font-semibold mb-4">{category} Products</h3>
-      <table className="table-auto w-full text-left border-collapse">
+      <table className="table-fixed w-full text-left border-collapse">
         <thead>
           <tr className="border-b border-gray-400">
             <th className="py-2 px-4">Image</th>
