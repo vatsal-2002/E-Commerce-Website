@@ -5,6 +5,7 @@ import ProductTable from "./adminvegetable";
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [setting, setsetting] = useState(null)
 
   const toggleProductDropdown = () => {
     setProductDropdownOpen((prevState) => !prevState);
@@ -200,17 +201,18 @@ const AdminDashboard = () => {
             )}
           </div>
 
-          <Link
-            to="/admin/settings"
-            className="px-4 py-2 text-white hover:bg-blue-700"
+          <p
+            // to="/admin/setting"
+            onClick={() => setsetting(true)}
+            className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
             Settings
-          </Link>
+          </p>
         </div>
       </div>
 
-      <div className="flex-1 p-6 bg-gray-100">
-        <div className="flex justify-between items-center mb-6">
+      <div className="flex-1  bg-gray-100">
+        <div className="flex p-6 justify-between items-center">
           <div>
             <h2 className="text-3xl font-semibold">Welcome, Admin!</h2>
             <p className="text-sm text-gray-600">
@@ -235,10 +237,37 @@ const AdminDashboard = () => {
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
+        ) : setting ? (
+            <div className='relative h-[calc(100vh-105px)] overflow-hidden bg-gradient-to-br from-cyan-500 to-blue-500'>
+              <div className='absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300'></div>
+              <div className='grid grid-cols-2 py-8 px-32'>
+                  <div className='relative z-10'></div>
+                  <div className='relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-tl from-teal-300 to-cyan-600 rounded-2xl' style={{boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.5)'}}>
+                      <p className='text-center text-2xl font-semibold'>Change Password</p>
+                      <div className='flex flex-col gap-3 pt-4'>
+                          <div>
+                              <p className='pb-1'>Email</p>
+                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter Your Email' type='email'/>
+                          </div>
+                          <div>
+                              <p className='pb-1'>Password</p>
+                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter New Password' type='password'/>
+                          </div>
+                          <div>
+                              <p className='pb-1'>Confirm Password</p>
+                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter Confirm Password' type='text'/>
+                          </div>
+                          <div className='pt-7'>
+                              <button className='w-full font-medium bg-gradient-to-tl from-cyan-500 to-blue-500 py-2 rounded-lg bg-'>Submit</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+            </div>
         ) : (
           <>
-          <p className="font-semibold text-2xl py-5">Product Categories</p>
-          <div className="grid grid-cols-3 gap-3">
+          <p className="font-semibold text-2xl py-5 px-6">Product Categories</p>
+          <div className="grid grid-cols-3 gap-3 px-6">
             {productsArray.map((categories, index)=>(
               <div className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg" key={index}> 
                 <p className="font-semibold text-xl">{categories.category}</p>
