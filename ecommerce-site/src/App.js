@@ -14,7 +14,6 @@ import AdminDashboard from "./components/dashboard";
 import UserDetail from "./components/UserDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./App.css";
-import Settings from "./components/Settings";
 
 function App() {
   const [isLoginPopupVisible, setIsLoginPopupVisible] = useState(false);
@@ -49,7 +48,7 @@ function App() {
           <Route path="/about" element={<AboutUs />} />
           <Route path="/userdetail" element={<UserDetail />} />
           <Route path="/error" element={<ErrorPage />} />
-          <Route path="/admin/settings" element={<Settings/>}/>
+          {/* <Route path="/admin/settings" element={<Settings/>}/> */}
 
           {/* Route for general login */}
           <Route path="/login" element={<Login />} />
