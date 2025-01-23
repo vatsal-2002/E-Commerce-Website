@@ -5,26 +5,28 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: 'absolute',
+//   top: '50%',
+//   left: '50%',
+//   transform: 'translate(-50%, -50%)',
+//   bgcolor: 'background.paper',
+//   border: '1px solid #000',
+//   boxShadow: 24,
+//   p: 4,
+// };
 
 const ProductTable = ({ category, products, onEdit, onDelete }) => {
 
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [file, setFile] = useState();
+  const [editbtn, seteditbtn] = useState(false)
   
   const handleOpen = (product) => {
     setSelectedProduct(product);
-    setOpen(true);
+    seteditbtn(true);
+    // setOpen(true);
   };
 
   const handleClose = () => {
@@ -67,13 +69,18 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
               <td className="py-2 px-4">{product.price}</td>
               <td className="pt-6 px-4 flex gap-2 h-full items-center">
                 
-                  <Button
+                  <button
                     onClick={() => handleOpen(product)}
-                    // onClick={() => onEdit(product)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white h-full py-1 px-3 rounded"
+                  >
+                    Edit
+                  </button>
+                  {/* <Button
+                    onClick={() => handleOpen(product)}
                     className="bg-blue-600 text-black h-full py-1 px-3 rounded"
                   >
                     Edit
-                  </Button>
+                  </Button> */}
                   <button
                     onClick={() => onDelete(product)}
                     className="bg-red-600 hover:bg-red-700 text-white h-full py-1 px-3 rounded"
@@ -87,7 +94,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
         </tbody>
       </table>
     </div>
-    <div>
+    {/* <div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -140,7 +147,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
           </Typography>
         </Box>
       </Modal>
-    </div>
+    </div> */}
     </>
   );
 };

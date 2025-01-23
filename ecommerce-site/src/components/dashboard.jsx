@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import ProductTable from "./adminvegetable";
+import Editform from "./Editform";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [setting, setsetting] = useState(null)
+  const [editProduct, setEditProduct] = useState(null);
 
   const toggleProductDropdown = () => {
     setProductDropdownOpen((prevState) => !prevState);
@@ -17,6 +19,7 @@ const AdminDashboard = () => {
 
   const handleEdit = (product) => {
     console.log("Editing product", product);
+    setEditProduct(product);
   };
 
   const handleDelete = (product) => {
@@ -230,7 +233,16 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {selectedCategory ? (
+        {editProduct ? (
+        <Editform
+          product={editProduct}
+          onCancel={() => setEditProduct(null)}
+          onSave={(updatedProduct) => {
+            console.log("Updated product:", updatedProduct);
+            setEditProduct(null);
+          }}
+        />
+        ) : selectedCategory ? (
           <ProductTable
             category={selectedCategory}
             products={products[selectedCategory]}
