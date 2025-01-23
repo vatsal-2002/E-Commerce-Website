@@ -22,7 +22,8 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
 
   const handleOpen = (product) => {
     setSelectedProduct(product);
-    setOpen(true);
+    seteditbtn(true);
+    // setOpen(true);
   };
 
   const handleClose = () => {
@@ -69,7 +70,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
                     className="bg-blue-600 text-black h-full py-1 px-3 rounded"
                   >
                     Edit
-                  </Button>
+                  </Button> */}
                   <button
                     onClick={() => onDelete(product)}
                     className="bg-red-600 hover:bg-red-700 text-white h-full py-1 px-3 rounded"

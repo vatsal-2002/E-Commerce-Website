@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
+import Editform from "./Editform";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
@@ -113,6 +114,7 @@ const AdminDashboard = () => {
 
   const handleEdit = (product) => {
     console.log("Editing product", product);
+    setEditProduct(product);
   };
 
   const handleDelete = (product) => {
@@ -205,7 +207,16 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {selectedCategory ? (
+        {editProduct ? (
+        <Editform
+          product={editProduct}
+          onCancel={() => setEditProduct(null)}
+          onSave={(updatedProduct) => {
+            console.log("Updated product:", updatedProduct);
+            setEditProduct(null);
+          }}
+        />
+        ) : selectedCategory ? (
           <ProductTable
             category={selectedCategory}
             products={products[selectedCategory] || []}
