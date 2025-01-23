@@ -1,10 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import ProductTable from "./adminvegetable";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiEndpoint, setApiEndpoint] = useState("");
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      if (!apiEndpoint || !selectedCategory) return;
+      setLoading(true);
+      try {
+        const response = await axios.get(apiEndpoint);
+
+        console.log(`API Response for ${selectedCategory}:`, response.data);
+
+        if (Array.isArray(response.data)) {
+          setProducts((prevProducts) => ({
+            ...prevProducts,
+            [selectedCategory]: response.data,
+          }));
+        } else {
+          console.error(
+            "Expected an array of products, but received:",
+            response.data
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [apiEndpoint, selectedCategory]);
 
   const toggleProductDropdown = () => {
     setProductDropdownOpen((prevState) => !prevState);
@@ -12,6 +46,29 @@ const AdminDashboard = () => {
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+
+    let endpoint = "";
+    switch (category) {
+      case "Fruit & Vegetables":
+        endpoint = "http://localhost:5000/api/adminfruit";
+        break;
+      case "Dairy, Bread & Eggs":
+        endpoint = "http://localhost:5000/api/adminallitem";
+        break;
+      case "Chicken, Meat & Fish":
+        endpoint = "http://localhost:5000/api/adminallMeat";
+        break;
+      case "Pet Food":
+        endpoint = "http://localhost:5000/api/adminallPetFood";
+        break;
+      case "Cold Drinks & Juices":
+        endpoint = "http://localhost:5000/api/adminallColdDrinksJuices";
+        break;
+      default:
+        break;
+    }
+
+    setApiEndpoint(endpoint);
   };
 
   const handleEdit = (product) => {
@@ -22,119 +79,25 @@ const AdminDashboard = () => {
     console.log("Deleting product", product);
   };
 
-  const products = {
-    "Fruit & Vegetables": [
-      {
-        title: "Apple",
-        weight: "1 kg",
-        price: "$3.00",
-        image: "/path/to/apple.jpg",
-      },
-      {
-        title: "Banana",
-        weight: "1.2 kg",
-        price: "$2.50",
-        image: "/path/to/banana.jpg",
-      },
-      {
-        title: "Carrot",
-        weight: "1 kg",
-        price: "$1.80",
-        image: "/path/to/carrot.jpg",
-      },
-    ],
-    "Dairy, Bread & Eggs": [
-      {
-        title: "Milk",
-        weight: "1 L",
-        price: "$1.50",
-        image: "/path/to/milk.jpg",
-      },
-      {
-        title: "Bread",
-        weight: "500g",
-        price: "$1.00",
-        image: "/path/to/bread.jpg",
-      },
-      {
-        title: "Eggs",
-        weight: "12 pcs",
-        price: "$2.20",
-        image: "/path/to/eggs.jpg",
-      },
-    ],
-    "Chicken, Meat & Fish": [
-      {
-        title: "Chicken lolipop",
-        weight: "100 g",
-        price: "$3.50",
-        image: "/path/to/chicken.jpg",
-      },
-      {
-        title: "Hotdog",
-        weight: "1 pcs",
-        price: "$2.00",
-        image: "/path/to/hotdog.jpg",
-      },
-      {
-        title: "Salmon",
-        weight: "200 g",
-        price: "$4.50",
-        image: "/path/to/salmon.jpg",
-      }
-    ],
-    "Pet Food": [
-      {
-        title: "Dog food",
-        weight: "500 g",
-        price: "$20.00",
-        image: "/path/to/dogfood.jpg"
-      },
-      {
-        title: "Cat food",
-        weight: "500 g",
-        price: "$23.00",
-        image: "/path/to/catfood.jpg"
-      },
-      {
-        title: "Bird food",
-        weight: "200 g",
-        price: "$10.00",
-        image: "/path/to/birdfood.jpg"
-      },
-      {
-        title: "Fish food",
-        weight: "100 g",
-        price: "$10.00",
-        image: "/path/to/fishfood.jpg"
-      }
-    ],
-    "Cold Drinks & Juices": [
-      {
-        title: "Coca cola",
-        weight: "150 ml",
-        price: "$6.50",
-        image: "/path/to/cocacola.jpg"
-      },
-      {
-        title: "Sprite",
-        weight: "150 ml",
-        price: "$6.50",
-        image: "/path/to/sprite.jpg"
-      },
-      {
-        title: "Mix fruite",
-        weight: "200 ml",
-        price: "$10.00",
-        image: "/path/to/mixfruite.jpg"
-      },
-    ]
-  };
+  const categories = [
+    "Fruit & Vegetables",
+    "Dairy, Bread & Eggs",
+    "Chicken, Meat & Fish",
+    "Pet Food",
+    "Cold Drinks & Juices",
+  ];
 
-  const productsArray = Object.entries(products).map(([category, items]) => ({
-    category,
-    items,
-  }));
+  const getTotalProductsCount = (category) => {
+    console.log("Products state:", products);
+
+    if (products[category]) {
+      console.log(`Total products for ${category}:`, products[category].length);
+      return products[category].length;
+    } else {
+      console.log(`No products found for category: ${category}`);
+      return 0;
+    }
+  };
 
   return (
     <div className="flex h-screen">
@@ -162,40 +125,25 @@ const AdminDashboard = () => {
               className="flex justify-between items-center w-full text-left px-4 py-2 text-white hover:bg-blue-700"
             >
               Products
-              <p className={`${isProductDropdownOpen ? 'rotate-45' : '' } font-bold text-xl transition-all my-auto`}>+</p>
+              <p
+                className={`${
+                  isProductDropdownOpen ? "rotate-45" : ""
+                } font-bold text-xl transition-all my-auto`}
+              >
+                +
+              </p>
             </button>
             {isProductDropdownOpen && (
               <div className="text-white pl-0">
-                <p
-                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
-                  onClick={() => handleCategoryClick("Fruit & Vegetables")}
-                >
-                  Fruits & Vegetables
-                </p>
-                <p
-                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
-                  onClick={() => handleCategoryClick("Dairy, Bread & Eggs")}
-                >
-                  Dairy, Bread & Eggs
-                </p>
-                <p 
-                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
-                  onClick={() => handleCategoryClick("Chicken, Meat & Fish")}                
-                >
-                  Chicken, Meat & Fish
-                </p>
-                <p 
-                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
-                  onClick={() => handleCategoryClick("Pet Food")}
-                >
-                  Pet Food
-                </p>
-                <p 
-                  className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
-                  onClick={() => handleCategoryClick("Cold Drinks & Juices")}
-                >
-                  Cold Drinks & Juices
-                </p>
+                {categories.map((category) => (
+                  <p
+                    key={category}
+                    className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category}
+                  </p>
+                ))}
               </div>
             )}
           </div>
@@ -231,21 +179,25 @@ const AdminDashboard = () => {
         {selectedCategory ? (
           <ProductTable
             category={selectedCategory}
-            products={products[selectedCategory]}
+            products={products[selectedCategory] || []}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            loading={loading}
           />
         ) : (
           <>
-          <p className="font-semibold text-2xl py-5">Product Categories</p>
-          <div className="grid grid-cols-3 gap-3">
-            {productsArray.map((categories, index)=>(
-              <div className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg" key={index}> 
-                <p className="font-semibold text-xl">{categories.category}</p>
-                <p>Total products: {categories.items.length}</p>
-              </div>
-            ))}
-          </div>
+            <p className="font-semibold text-2xl py-5">Product Categories</p>
+            <div className="grid grid-cols-3 gap-3">
+              {categories.map((category) => (
+                <div
+                  className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg"
+                  key={category}
+                >
+                  <p className="font-semibold text-xl">{category}</p>
+                  <p>Total products: {getTotalProductsCount(category)}</p>
+                </div>
+              ))}
+            </div>
           </>
         )}
       </div>
