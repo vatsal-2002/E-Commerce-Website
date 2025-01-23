@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
 
@@ -9,6 +9,47 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiEndpoint, setApiEndpoint] = useState("");
+  const [setting, setSetting] = useState(false);
+  const [productCounts, setProductCounts] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/admin");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchProductCounts = async () => {
+      const endpoints = {
+        "Fruit & Vegetables": "http://localhost:5000/api/adminfruit",
+        "Dairy, Bread & Eggs": "http://localhost:5000/api/adminallitem",
+        "Chicken, Meat & Fish": "http://localhost:5000/api/adminallMeat",
+        "Pet Food": "http://localhost:5000/api/adminallPetFood",
+        "Cold Drinks & Juices":
+          "http://localhost:5000/api/adminallColdDrinksJuices",
+      };
+
+      const counts = {};
+
+      for (const category in endpoints) {
+        try {
+          const response = await axios.get(endpoints[category]);
+          counts[category] = Array.isArray(response.data)
+            ? response.data.length
+            : 0;
+        } catch (error) {
+          console.error(`Error fetching products for ${category}:`, error);
+          counts[category] = 0;
+        }
+      }
+
+      setProductCounts(counts);
+    };
+
+    fetchProductCounts();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -16,7 +57,6 @@ const AdminDashboard = () => {
       setLoading(true);
       try {
         const response = await axios.get(apiEndpoint);
-
         console.log(`API Response for ${selectedCategory}:`, response.data);
 
         if (Array.isArray(response.data)) {
@@ -87,18 +127,6 @@ const AdminDashboard = () => {
     "Cold Drinks & Juices",
   ];
 
-  const getTotalProductsCount = (category) => {
-    console.log("Products state:", products);
-
-    if (products[category]) {
-      console.log(`Total products for ${category}:`, products[category].length);
-      return products[category].length;
-    } else {
-      console.log(`No products found for category: ${category}`);
-      return 0;
-    }
-  };
-
   return (
     <div className="flex h-screen">
       <div className="w-64 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white">
@@ -109,6 +137,7 @@ const AdminDashboard = () => {
           <Link
             to="/admin/dashboard"
             className="px-4 py-2 text-white hover:bg-blue-700"
+            onClick={() => setSelectedCategory(null)}
           >
             Dashboard
           </Link>
@@ -149,8 +178,7 @@ const AdminDashboard = () => {
           </div>
 
           <p
-            // to="/admin/setting"
-            onClick={() => setsetting(true)}
+            onClick={() => setSetting(true)}
             className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
             Settings
@@ -158,7 +186,7 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="flex-1  bg-gray-100">
+      <div className="flex-1 bg-gray-100">
         <div className="flex p-6 justify-between items-center">
           <div>
             <h2 className="text-3xl font-semibold">Welcome, Admin!</h2>
@@ -186,43 +214,64 @@ const AdminDashboard = () => {
             loading={loading}
           />
         ) : setting ? (
-            <div className='relative h-[calc(100vh-105px)] overflow-hidden bg-gradient-to-br from-cyan-500 to-blue-500'>
-              <div className='absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300'></div>
-              <div className='grid grid-cols-2 py-8 px-32'>
-                  <div className='relative z-10'></div>
-                  <div className='relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-tl from-teal-300 to-cyan-600 rounded-2xl' style={{boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.5)'}}>
-                      <p className='text-center text-2xl font-semibold'>Change Password</p>
-                      <div className='flex flex-col gap-3 pt-4'>
-                          <div>
-                              <p className='pb-1'>Email</p>
-                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter Your Email' type='email'/>
-                          </div>
-                          <div>
-                              <p className='pb-1'>Password</p>
-                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter New Password' type='password'/>
-                          </div>
-                          <div>
-                              <p className='pb-1'>Confirm Password</p>
-                              <input className='w-full p-2 rounded-md text-black focus:outline-none' placeholder='Enter Confirm Password' type='text'/>
-                          </div>
-                          <div className='pt-7'>
-                              <button className='w-full font-medium bg-gradient-to-tl from-cyan-500 to-blue-500 py-2 rounded-lg bg-'>Submit</button>
-                          </div>
-                      </div>
+          <div className="relative h-[calc(100vh-105px)] overflow-hidden bg-gradient-to-br from-cyan-500 to-blue-500">
+            <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div>
+            <div className="grid grid-cols-2 py-8 px-32">
+              <div className="relative z-10"></div>
+              <div
+                className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-tl from-teal-300 to-cyan-600 rounded-2xl"
+                style={{ boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)" }}
+              >
+                <p className="text-center text-2xl font-semibold">
+                  Change Password
+                </p>
+                <div className="flex flex-col gap-3 pt-4">
+                  <div>
+                    <p className="pb-1">Email</p>
+                    <input
+                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      placeholder="Enter Your Email"
+                      type="email"
+                    />
                   </div>
+                  <div>
+                    <p className="pb-1">Password</p>
+                    <input
+                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      placeholder="Enter New Password"
+                      type="password"
+                    />
+                  </div>
+                  <div>
+                    <p className="pb-1">Confirm Password</p>
+                    <input
+                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      placeholder="Enter Confirm Password"
+                      type="text"
+                    />
+                  </div>
+                  <div className="pt-7">
+                    <button className="w-full font-medium bg-gradient-to-tl from-cyan-500 to-blue-500 py-2 rounded-lg">
+                      Submit
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
         ) : (
           <>
-            <p className="font-semibold text-2xl py-5">Product Categories</p>
-            <div className="grid grid-cols-3 gap-3">
+            <p className="font-semibold text-2xl py-5 p-4">
+              Product Categories
+            </p>
+            <div className="grid grid-cols-3 gap-3 p-4">
               {categories.map((category) => (
                 <div
                   className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg"
                   key={category}
                 >
                   <p className="font-semibold text-xl">{category}</p>
-                  <p>Total products: {getTotalProductsCount(category)}</p>
+                  <p>Total products: {productCounts[category] || 0}</p>
                 </div>
               ))}
             </div>
