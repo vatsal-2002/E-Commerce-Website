@@ -22,8 +22,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
 
   const handleOpen = (product) => {
     setSelectedProduct(product);
-    seteditbtn(true);
-    // setOpen(true);
+    setOpen(true);
   };
 
   const handleClose = () => {
@@ -70,7 +69,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
                     className="bg-blue-600 text-black h-full py-1 px-3 rounded"
                   >
                     Edit
-                  </Button> */}
+                  </Button>
                   <button
                     onClick={() => onDelete(product)}
                     className="bg-red-600 hover:bg-red-700 text-white h-full py-1 px-3 rounded"
@@ -100,12 +99,12 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
               {selectedProduct && (
                 <div className="flex flex-col gap-3">
                   <div>
-                    <p>Edit Image :</p>
+                    <p>Image :</p>
                     <input type="file" onChange={handleChange} />
                     <img className="w-72" src={file} alt="" />
                   </div>
                   <div>
-                    <p>Edit Title :</p>
+                    <p>Title :</p>
                     <input
                       defaultValue={selectedProduct.title}
                       className="border rounded-lg w-full py-1 px-2"
@@ -113,7 +112,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
                     />
                   </div>
                   <div>
-                    <p>Edit Weight :</p>
+                    <p>Weight :</p>
                     <input
                       defaultValue={selectedProduct.weight}
                       className="border rounded-lg w-full py-1 px-2"
@@ -121,7 +120,7 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
                     />
                   </div>
                   <div>
-                    <p>Edit Price :</p>
+                    <p>Price :</p>
                     <input
                       defaultValue={selectedProduct.price}
                       className="border rounded-lg w-full py-1 px-2"

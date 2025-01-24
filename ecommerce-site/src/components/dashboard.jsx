@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
-import Editform from "./Editform";
+// import Editform from "./Editform";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
@@ -114,7 +114,7 @@ const AdminDashboard = () => {
 
   const handleEdit = (product) => {
     console.log("Editing product", product);
-    setEditProduct(product);
+    // setEditProduct(product);
   };
 
   const handleDelete = (product) => {
@@ -144,8 +144,9 @@ const AdminDashboard = () => {
             Dashboard
           </Link>
           <Link
-            to="/admin/users"
+            // to="/admin/users"
             className="px-4 py-2 text-white hover:bg-blue-700"
+            onClick={() => setSelectedCategory(null)}
           >
             Users
           </Link>
@@ -207,7 +208,7 @@ const AdminDashboard = () => {
           </button>
         </div>
 
-        {editProduct ? (
+        {/* {editProduct ? (
         <Editform
           product={editProduct}
           onCancel={() => setEditProduct(null)}
@@ -215,8 +216,8 @@ const AdminDashboard = () => {
             console.log("Updated product:", updatedProduct);
             setEditProduct(null);
           }}
-        />
-        ) : selectedCategory ? (
+        /> */}
+        {selectedCategory ? (
           <ProductTable
             category={selectedCategory}
             products={products[selectedCategory] || []}
@@ -225,12 +226,12 @@ const AdminDashboard = () => {
             loading={loading}
           />
         ) : setting ? (
-          <div className="relative h-[calc(100vh-105px)] overflow-hidden bg-gradient-to-br from-cyan-500 to-blue-500">
-            <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div>
-            <div className="grid grid-cols-2 py-8 px-32">
-              <div className="relative z-10"></div>
+          <div className="relative h-[calc(100vh-105px)] overflow-hidden">
+            {/* <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div> */}
+            <div className="grid grid-cols-1 py-8 px-72">
+              {/* <div className="relative z-10"></div> */}
               <div
-                className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-tl from-teal-300 to-cyan-600 rounded-2xl"
+                className="relative z-10 pt-6 pb-8 px-10 text-white bg-blue-400 rounded-2xl"
                 style={{ boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)" }}
               >
                 <p className="text-center text-2xl font-semibold">
@@ -262,7 +263,7 @@ const AdminDashboard = () => {
                     />
                   </div>
                   <div className="pt-7">
-                    <button className="w-full font-medium bg-gradient-to-tl from-cyan-500 to-blue-500 py-2 rounded-lg">
+                    <button className="w-full font-medium bg-blue-600 active:bg-blue-700 active:ring-1 ring-gray-700 py-2 rounded-lg">
                       Submit
                     </button>
                   </div>
