@@ -71,7 +71,7 @@ const Blog = () => {
         className="relative bg-cover bg-center mt-8 py-20 px-10 flex items-center justify-center"
         style={{ backgroundImage: `url(${aboutbg})` }}
       >
-        <div className="text-left max-w-lg text-center">
+        <div className="text-left max-w-lg">
           <h2 className="text-[#FAB528] text-lg mb-2">About Us</h2>
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
             We give you the lowest <br /> prices on all your grocery needs.

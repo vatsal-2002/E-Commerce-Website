@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const Settings = () => {
+
   return (
     <>
     <div className='relative 2xl:container mx-auto overflow-hidden h-screen bg-gradient-to-br from-cyan-500 to-blue-500'>
