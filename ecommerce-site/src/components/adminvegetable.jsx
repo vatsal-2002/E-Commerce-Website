@@ -1,126 +1,121 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { fetchProducts, createProduct, updateProduct } from "./api";
+import AddProductForm from "./AddProductForm";
+import EditProductForm from "./EditProductForm";
 import Button from "@mui/material/Button";
 
-const ProductTable = ({ category, products, onEdit, onDelete }) => {
+const ProductTable = ({ category, onDelete }) => {
+  const [updatedProducts, setUpdatedProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [file, setFile] = useState(null);
-  const [updatedProducts, setUpdatedProducts] = useState(products);
-
-  const getApiEndpoint = (category) => {
-    switch (category) {
-      case "Fruit & Vegetables":
-        return "http://localhost:5000/api/adminfruit";
-      case "Dairy, Bread & Eggs":
-        return "http://localhost:5000/api/adminallitem";
-      case "Chicken, Meat & Fish":
-        return "http://localhost:5000/api/adminallMeat";
-      case "Pet Food":
-        return "http://localhost:5000/api/adminallPetFood";
-      case "Cold Drinks & Juices":
-        return "http://localhost:5000/api/adminallColdDrinksJuices";
-      default:
-        return "";
-    }
-  };
+  const [isAddNewItemVisible, setIsAddNewItemVisible] = useState(false);
 
   useEffect(() => {
-    const fetchUpdatedProducts = async () => {
+    const getProducts = async () => {
       try {
-        const apiEndpoint = getApiEndpoint(category);
-        if (apiEndpoint) {
-          const response = await axios.get(apiEndpoint);
-          setUpdatedProducts(response.data);
-        }
+        const products = await fetchProducts(category);
+        setUpdatedProducts(products);
       } catch (error) {
-        console.error("Error fetching products:", error);
-        alert("Failed to fetch updated products.");
+        alert(error.message);
       }
     };
 
     if (category) {
-      fetchUpdatedProducts();
+      getProducts();
     }
   }, [category]);
 
   const handleEdit = (product) => {
     setSelectedProduct(product);
-    setFile(null);
+    setIsAddNewItemVisible(true);
   };
 
-  const handleImageChange = (e) => {
-    setFile(URL.createObjectURL(e.target.files[0]));
-  };
-
-  const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append("title", selectedProduct.title);
-    formData.append("weight", selectedProduct.weight);
-    formData.append("price", selectedProduct.price);
-
-    if (file) {
-      const imageFile = document.querySelector('input[type="file"]').files[0];
-      formData.append("image", imageFile);
-    }
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.log("No token found");
-      return;
-    }
-
-    let updateApiEndpoint = "";
-    switch (category) {
-      case "Fruit & Vegetables":
-        updateApiEndpoint = `http://localhost:5000/api/adminfruit/${selectedProduct._id}`;
-        break;
-      case "Dairy, Bread & Eggs":
-        updateApiEndpoint = `http://localhost:5000/api/adminupdateitem/${selectedProduct._id}`;
-        break;
-      case "Chicken, Meat & Fish":
-        updateApiEndpoint = `http://localhost:5000/api/adminupdateMeat/${selectedProduct._id}`;
-        break;
-      case "Pet Food":
-        updateApiEndpoint = `http://localhost:5000/api/adminupdatePetFood/${selectedProduct._id}`;
-        break;
-      case "Cold Drinks & Juices":
-        updateApiEndpoint = `http://localhost:5000/api/adminupdateColdDrinkJuice/${selectedProduct._id}`;
-        break;
-      default:
-        break;
-    }
-
-    try {
-      const response = await axios.put(updateApiEndpoint, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log("Product updated successfully", response.data);
-
-      const updatedProductList = await axios.get(getApiEndpoint(category));
-      setUpdatedProducts(updatedProductList.data);
-
-      setSelectedProduct(null);
-      alert("Product updated successfully!");
-    } catch (error) {
-      console.error("Error updating product:", error);
-      alert("Error updating product. Please try again.");
-    }
+  const handleAddNewItemClick = () => {
+    setSelectedProduct(null);
+    setIsAddNewItemVisible(true);
   };
 
   const handleClose = () => {
     setSelectedProduct(null);
+    setIsAddNewItemVisible(false);
+  };
+
+  const handleSubmit = async (formData) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No token found");
+      return;
+    }
+
+    try {
+      if (selectedProduct) {
+        await updateProduct(category, selectedProduct._id, formData, token);
+        alert("Product updated successfully");
+      } else {
+        await createProduct(category, formData, token);
+        alert("Product added successfully");
+      }
+      const products = await fetchProducts(category);
+      setUpdatedProducts(products);
+      handleClose();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleDelete = async (product) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No token found");
+      return;
+    }
+
+    try {
+      const apiEndpoint = getDeleteApiEndpoint(category, product._id); 
+
+      const response = await axios.delete(apiEndpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert(response.data.message);
+
+      // Fetch the updated list of products after deletion
+      const products = await fetchProducts(category);
+      setUpdatedProducts(products);
+    } catch (error) {
+      alert("Error deleting product: " + error.message);
+    }
+  };
+
+  const getDeleteApiEndpoint = (category, productId) => {
+    switch (category) {
+      case "Fruit & Vegetables":
+        return `http://localhost:5000/api/admindeletefruit/${productId}`;
+      case "Dairy, Bread & Eggs":
+        return `http://localhost:5000/api/admindeleteitem/${productId}`;
+      case "Chicken, Meat & Fish":
+        return `http://localhost:5000/api/admindeleteMeat/${productId}`;
+      case "Pet Food":
+        return `http://localhost:5000/api/admindeletePetFood/${productId}`;
+      case "Cold Drinks & Juices":
+        return `http://localhost:5000/api/admindeleteColdDrinkJuice/${productId}`;
+      default:
+        return "";
+    }
   };
 
   return (
-    <>
-      {!selectedProduct ? (
+    <div>
+      {!selectedProduct && !isAddNewItemVisible ? (
         <div className="px-6">
           <div className="flex justify-between items-center px-6">
             <h3 className="text-2xl font-semibold mb-4">{category} Products</h3>
-            <Button className="bg-blue-600 text-white py-2 px-4 rounded-lg transition-all duration-200 hover:bg-blue-700 hover:text-white">
+            <Button
+              onClick={handleAddNewItemClick}
+              className="bg-blue-600 text-white py-2 px-4 rounded-lg"
+            >
               Add New Item
             </Button>
           </div>
@@ -151,13 +146,13 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
                   <td className="pt-6 px-4 flex gap-2 h-full items-center">
                     <Button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-600 text-white h-full py-2 px-4 rounded-lg transition-all duration-200 hover:bg-blue-700 hover:text-white"
+                      className="bg-blue-600 text-white h-full py-2 px-4 rounded-lg"
                     >
                       Edit
                     </Button>
                     <button
-                      onClick={() => onDelete(product)}
-                      className="text-red-600 h-full py-2 px-4 rounded-lg transition-all duration-200 hover:bg-red-700 hover:text-white"
+                      onClick={() => handleDelete(product)}
+                      className="text-red-600 h-full py-2 px-4 rounded-lg"
                     >
                       Delete
                     </button>
@@ -170,102 +165,19 @@ const ProductTable = ({ category, products, onEdit, onDelete }) => {
       ) : (
         <div className="flex justify-center p-6 bg-gray-100">
           <div className="w-full max-w-3xl p-6 bg-white rounded-lg shadow-md">
-            <h3 className="text-2xl font-semibold mb-4 text-start text-blue-600">
-              Edit Product
-            </h3>
-            <div className="space-y-6">
-              <div className="flex gap-6 items-start">
-                <div className="w-1/2 space-y-4">
-                  <div>
-                    <label className="text-lg font-medium">Title:</label>
-                    <input
-                      value={selectedProduct.title}
-                      onChange={(e) =>
-                        setSelectedProduct({
-                          ...selectedProduct,
-                          title: e.target.value,
-                        })
-                      }
-                      className="w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      type="text"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-lg font-medium">Weight:</label>
-                    <input
-                      value={selectedProduct.weight}
-                      onChange={(e) =>
-                        setSelectedProduct({
-                          ...selectedProduct,
-                          weight: e.target.value,
-                        })
-                      }
-                      className="w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      type="text"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="text-lg font-medium">Price:</label>
-                    <input
-                      value={selectedProduct.price}
-                      onChange={(e) =>
-                        setSelectedProduct({
-                          ...selectedProduct,
-                          price: e.target.value,
-                        })
-                      }
-                      className="w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      type="text"
-                    />
-                  </div>
-                </div>
-
-                <div className="w-1/2 space-y-4">
-                  <div>
-                    <label className="text-lg font-medium">Image:</label>
-                    <input
-                      type="file"
-                      onChange={handleImageChange}
-                      className="w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {file ? (
-                      <img
-                        src={file}
-                        alt="Selected"
-                        className="w-32 h-32 object-cover border-2 border-gray-200 rounded-md shadow-sm mt-4"
-                      />
-                    ) : (
-                      <img
-                        src={`http://localhost:5000/${selectedProduct.image}`}
-                        alt={selectedProduct.title}
-                        className="w-32 h-32 object-cover border-2 border-gray-200 rounded-md shadow-sm mt-4"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-between mt-6">
-                <button
-                  onClick={handleClose}
-                  className="px-6 py-2 bg-gray-500 text-white rounded-lg transition-all duration-200 hover:bg-gray-600"
-                >
-                  Close
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg transition-all duration-200 hover:bg-blue-700"
-                >
-                  Update
-                </button>
-              </div>
-            </div>
+            {isAddNewItemVisible && !selectedProduct ? (
+              <AddProductForm onSubmit={handleSubmit} onClose={handleClose} />
+            ) : (
+              <EditProductForm
+                product={selectedProduct}
+                onSubmit={handleSubmit}
+                onClose={handleClose}
+              />
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

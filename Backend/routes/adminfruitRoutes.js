@@ -15,7 +15,7 @@ const {
 const router = express.Router();
 
 router.post(
-  "/adminfruit",
+  "/createadminfruit",
   authMiddleware,
   adminMiddleware,
   upload.single("image"),
@@ -34,6 +34,6 @@ router.put(
   updateFruit
 );
 
-router.delete("/adminfruit/:id", authMiddleware, adminMiddleware, deleteFruit);
+router.delete("/admindeletefruit/:id", authMiddleware, adminMiddleware, deleteFruit);
 
 module.exports = router;
