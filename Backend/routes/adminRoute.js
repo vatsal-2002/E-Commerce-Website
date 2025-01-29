@@ -1,5 +1,5 @@
 const express = require("express");
-const { loginUser } = require("../controllers/adminController");
+const { loginUser, changePassword } = require("../controllers/adminController");
 const {
   authMiddleware,
   adminMiddleware,
@@ -11,5 +11,12 @@ router.post("/login", loginUser);
 router.get("/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
   res.json({ message: "Welcome to the admin dashboard" });
 });
+
+router.post(
+  "/change-password",
+  authMiddleware,
+  adminMiddleware,
+  changePassword
+);
 
 module.exports = router;
