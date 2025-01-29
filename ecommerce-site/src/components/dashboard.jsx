@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
-// import Editform from "./Editform";
+import Editform from "./Editform";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
   const [productCounts, setProductCounts] = useState({});
+  const [editProduct, setEditProduct] = useState(false);
   const [email, setemail] = useState('')
   const [emailerror, setemailError] = useState('');
   const [password, setpassword] = useState('')
