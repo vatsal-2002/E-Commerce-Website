@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
-import Editform from "./Editform";
+// import Editform from "./Editform";
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
@@ -12,8 +12,25 @@ const AdminDashboard = () => {
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
   const [productCounts, setProductCounts] = useState({});
-  const [editProduct, setEditProduct] = useState(false);
+  const [email, setemail] = useState('')
+  const [emailerror, setemailError] = useState('');
+  const [password, setpassword] = useState('')
+  const [confirmpassword, setconfirmpassword] = useState('')
+  const [showpassword, setshowpassword] = useState(false);
   const navigate = useNavigate();
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setemail(value);
+
+    if (!emailRegex.test(value)) {
+      setemailError('Please enter a valid email address');
+    } else {
+      setemailError('');
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -82,6 +99,12 @@ const AdminDashboard = () => {
     fetchProducts();
   }, [apiEndpoint, selectedCategory]);
 
+  const submitdata = () => {
+    console.log(email)
+    console.log(password)
+    console.log(confirmpassword)
+  }
+
   const toggleProductDropdown = () => {
     setProductDropdownOpen((prevState) => !prevState);
   };
@@ -115,7 +138,7 @@ const AdminDashboard = () => {
 
   const handleEdit = (product) => {
     console.log("Editing product", product);
-    setEditProduct(product);
+    // setEditProduct(product);
   };
 
   const handleDelete = (product) => {
@@ -140,13 +163,20 @@ const AdminDashboard = () => {
           <Link
             to="/admin/dashboard"
             className="px-4 py-2 text-white hover:bg-blue-700"
-            onClick={() => setSelectedCategory(null)}
+            onClick={() => {
+              setSelectedCategory(null);
+              setSetting(false)
+            }}
           >
             Dashboard
           </Link>
           <Link
-            to="/admin/users"
+            // to="/admin/users"
             className="px-4 py-2 text-white hover:bg-blue-700"
+            onClick={() => {
+              setSelectedCategory(null);
+              setSetting(false)
+            }}
           >
             Users
           </Link>
@@ -181,7 +211,10 @@ const AdminDashboard = () => {
           </div>
 
           <p
-            onClick={() => setSetting(true)}
+            onClick={() => {
+              setSetting(true); 
+              setSelectedCategory(null)
+            }}
             className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
             Settings
@@ -226,12 +259,12 @@ const AdminDashboard = () => {
             loading={loading}
           />
         ) : setting ? (
-          <div className="relative h-[calc(100vh-105px)] overflow-hidden bg-gradient-to-br from-cyan-500 to-blue-500">
-            <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div>
-            <div className="grid grid-cols-2 py-8 px-32">
-              <div className="relative z-10"></div>
+          <div className="relative h-[calc(100vh-105px)] overflow-hidden">
+            {/* <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div> */}
+            <div className="grid grid-cols-1 py-8 px-72">
+              {/* <div className="relative z-10"></div> */}
               <div
-                className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-tl from-teal-300 to-cyan-600 rounded-2xl"
+                className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-br from-blue-500 via-blue-400 to-indigo-500 rounded-2xl"
                 style={{ boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)" }}
               >
                 <p className="text-center text-2xl font-semibold">
@@ -241,29 +274,39 @@ const AdminDashboard = () => {
                   <div>
                     <p className="pb-1">Email</p>
                     <input
-                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      className={`w-full p-2 rounded-md text-black focus:outline-none ${emailerror ? 'border-red-500' : ''}`}
+                      onChange={handleEmailChange} value={email}
                       placeholder="Enter Your Email"
                       type="email"
+                      required
                     />
+                    {emailerror && <p className="text-sm text-red-500">{emailerror}</p>}
                   </div>
                   <div>
                     <p className="pb-1">Password</p>
+                    <div className="flex items-center">
                     <input
-                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      className="w-full p-2 rounded-l-md text-black focus:outline-none"
+                      onChange={(e) => setpassword(e.target.value)} value={password}
                       placeholder="Enter New Password"
-                      type="password"
+                      type={`${showpassword ? 'text' : 'Password'}`}
+                      required
                     />
+                    <p onClick={() => setshowpassword(!showpassword)} className="bg-white px-2 py-2.5 font-medium rounded-r-md text-[13px] cursor-pointer text-black">{showpassword ? 'Hide' : 'Show'}</p>
+                    </div>
                   </div>
                   <div>
                     <p className="pb-1">Confirm Password</p>
                     <input
                       className="w-full p-2 rounded-md text-black focus:outline-none"
+                      onChange={(e) => setconfirmpassword(e.target.value)} value={confirmpassword}
                       placeholder="Enter Confirm Password"
                       type="text"
+                      required
                     />
                   </div>
                   <div className="pt-7">
-                    <button className="w-full font-medium bg-gradient-to-tl from-cyan-500 to-blue-500 py-2 rounded-lg">
+                    <button onClick={() => submitdata()} className="w-full font-medium bg-blue-600 active:bg-blue-700 active:ring-1 ring-gray-700 py-2 rounded-lg">
                       Submit
                     </button>
                   </div>
