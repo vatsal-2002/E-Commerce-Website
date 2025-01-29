@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
   const [productCounts, setProductCounts] = useState({});
-  const [editProduct, setEditProduct] = useState({});
+  const [editProduct, setEditProduct] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -209,14 +209,14 @@ const AdminDashboard = () => {
         </div>
 
         {editProduct ? (
-        <Editform
-          product={editProduct}
-          onCancel={() => setEditProduct(null)}
-          onSave={(updatedProduct) => {
-            console.log("Updated product:", updatedProduct);
-            setEditProduct(null);
-          }}
-        />
+          <Editform
+            product={editProduct}
+            onCancel={() => setEditProduct(null)}
+            onSave={(updatedProduct) => {
+              console.log("Updated product:", updatedProduct);
+              setEditProduct(null);
+            }}
+          />
         ) : selectedCategory ? (
           <ProductTable
             category={selectedCategory}
