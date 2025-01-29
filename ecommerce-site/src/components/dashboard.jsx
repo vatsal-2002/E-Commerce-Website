@@ -11,6 +11,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
+  const [showuser, setshowuser] = useState(false);
   const [productCounts, setProductCounts] = useState({});
   const [editProduct, setEditProduct] = useState(false);
   const [email, setemail] = useState('')
@@ -146,6 +147,30 @@ const AdminDashboard = () => {
     console.log("Deleting product", product);
   };
 
+  const passwords = [
+    'robert@123',
+    'dow@123',
+    'john@123'
+  ]
+
+  const userdata = [
+    {
+      mail: 'robert@123gmail.com',
+      name: 'Robert',
+      password: 'robert@123'
+    },
+    {
+      mail: 'dow@123gmail.com',
+      name: 'Dow',
+      password: ''
+    },
+    {
+      mail: 'john@123gmail.com',
+      name: 'John',
+      password: ''
+    },
+  ]
+
   const categories = [
     "Fruit & Vegetables",
     "Dairy, Bread & Eggs",
@@ -167,6 +192,7 @@ const AdminDashboard = () => {
             onClick={() => {
               setSelectedCategory(null);
               setSetting(false)
+              setshowuser(false)
             }}
           >
             Dashboard
@@ -177,6 +203,7 @@ const AdminDashboard = () => {
             onClick={() => {
               setSelectedCategory(null);
               setSetting(false)
+              setshowuser(true)
             }}
           >
             Users
@@ -215,6 +242,7 @@ const AdminDashboard = () => {
             onClick={() => {
               setSetting(true); 
               setSelectedCategory(null)
+              setshowuser(false)
             }}
             className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
@@ -313,6 +341,32 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        ) : showuser ? (
+          <div className="">
+            <div className="px-12">
+              <p className="font-semibold text-2xl">User Details</p>
+            </div>
+            <div className="py-4 px-6">
+              <table className="table-fixed w-[90%]">
+                <thead>
+                  <tr className="border-b border-gray-400">
+                    <th className="text-left py-2 px-4">Email</th>
+                    <th className="text-left py-2 px-4">Name</th>
+                    <th className="text-left py-2 px-4">Password</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userdata.map((data, index)=>(
+                  <tr className="" key={index}>
+                      <td className="py-3 px-4">{data.mail}</td>
+                      <td className="px-4">{data.name}</td>
+                      <td className="px-4">{data.password}</td>
+                  </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         ) : (
