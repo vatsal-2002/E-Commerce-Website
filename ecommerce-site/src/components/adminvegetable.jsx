@@ -71,7 +71,7 @@ const ProductTable = ({ category, onDelete }) => {
     }
 
     try {
-      const apiEndpoint = getDeleteApiEndpoint(category, product._id); 
+      const apiEndpoint = getDeleteApiEndpoint(category, product._id);
 
       const response = await axios.delete(apiEndpoint, {
         headers: {

@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
   const [productCounts, setProductCounts] = useState({});
+  const [editProduct, setEditProduct] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
