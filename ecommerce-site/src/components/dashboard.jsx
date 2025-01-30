@@ -18,6 +18,7 @@ const AdminDashboard = () => {
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -100,10 +101,47 @@ const AdminDashboard = () => {
     fetchProducts();
   }, [apiEndpoint, selectedCategory]);
 
-  const submitdata = () => {
-    console.log(email);
-    console.log(password);
-    console.log(confirmpassword);
+  const submitdata = async () => {
+    if (!email || !password || !confirmpassword) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmpassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("Please login to change the password.");
+        return;
+      }
+
+      const response = await axios.post(
+        "http://localhost:5000/api/change-password",
+        { email, password, confirmPassword: confirmpassword },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setSuccessMessage(response.data.message);
+      setemail("");
+      setpassword("");
+      setconfirmpassword("");
+      setemailError("");
+    } catch (error) {
+      console.error("Error changing password:", error);
+      alert(
+        error.response?.data?.error ||
+          "An error occurred while changing the password."
+      );
+    }
   };
 
   const toggleProductDropdown = () => {
@@ -139,7 +177,6 @@ const AdminDashboard = () => {
 
   const handleEdit = (product) => {
     console.log("Editing product", product);
-    // setEditProduct(product);
   };
 
   const handleDelete = (product) => {
@@ -242,6 +279,10 @@ const AdminDashboard = () => {
           </button>
         </div>
 
+        {successMessage && (
+          <div className="text-center text-green-500 p-4">{successMessage}</div>
+        )}
+
         {editProduct ? (
           <Editform
             product={editProduct}
@@ -261,9 +302,7 @@ const AdminDashboard = () => {
           />
         ) : setting ? (
           <div className="relative h-[calc(100vh-105px)] overflow-hidden">
-            {/* <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div> */}
             <div className="grid grid-cols-1 py-8 px-72">
-              {/* <div className="relative z-10"></div> */}
               <div
                 className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-br from-blue-500 via-blue-400 to-indigo-500 rounded-2xl"
                 style={{ boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)" }}
