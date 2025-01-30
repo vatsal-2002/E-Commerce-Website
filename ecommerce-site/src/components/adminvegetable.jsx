@@ -143,16 +143,16 @@ const ProductTable = ({ category, onDelete }) => {
                   <td className="py-2 px-4">{product.title}</td>
                   <td className="py-2 px-4">{product.weight}</td>
                   <td className="py-2 px-4">${product.price}</td>
-                  <td className="pt-6 px-4 flex gap-2 h-full items-center">
+                  <td className="pt-5 px-4 flex gap-2 h-full items-center">
                     <Button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-600 text-white h-full py-2 px-4 rounded-lg"
+                      className="relative top-1 bg-blue-600 text-white h-full py-2 px-3 rounded-md"
                     >
                       Edit
                     </Button>
                     <button
                       onClick={() => handleDelete(product)}
-                      className="text-red-600 h-full py-2 px-4 rounded-lg"
+                      className="relative top-0.5 text-red-600 py-1.5 px-3 rounded-[4px] hover:bg-red-50"
                     >
                       Delete
                     </button>

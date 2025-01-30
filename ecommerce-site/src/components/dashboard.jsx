@@ -147,27 +147,26 @@ const AdminDashboard = () => {
     console.log("Deleting product", product);
   };
 
-  const passwords = [
-    'robert@123',
-    'dow@123',
-    'john@123'
-  ]
-
   const userdata = [
     {
-      mail: 'robert@123gmail.com',
-      name: 'Robert',
-      password: 'robert@123'
+      name: 'John Dow',
+      email: 'john123@gmail.com',
+      message: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores, odio!'
     },
     {
-      mail: 'dow@123gmail.com',
-      name: 'Dow',
-      password: ''
+      name: 'Leery Caul',
+      email: 'leery123@gmail.com',
+      message: 'amet consectetur adipisicing elit. Maiores, odio!'
     },
     {
-      mail: 'john@123gmail.com',
-      name: 'John',
-      password: ''
+      name: 'Robert Nikosn',
+      email: 'robert@gmail.com',
+      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.'
+    },
+    {
+      name: 'Jash Kumar',
+      email: 'jash123@gmail.com',
+      message: 'cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.'
     },
   ]
 
@@ -345,24 +344,25 @@ const AdminDashboard = () => {
           </div>
         ) : showuser ? (
           <div className="">
-            <div className="px-12">
+            <div className="flex justify-between px-12">
               <p className="font-semibold text-2xl">User Details</p>
+              <button className="px-3 bg-blue-200 active:bg-blue-300 py-1 rounded-lg">Filter</button>
             </div>
             <div className="py-4 px-6">
-              <table className="table-fixed w-[90%]">
+              <table className="table-auto w-[90%]">
                 <thead>
                   <tr className="border-b border-gray-400">
-                    <th className="text-left py-2 px-4">Email</th>
-                    <th className="text-left py-2 px-4">Name</th>
-                    <th className="text-left py-2 px-4">Password</th>
+                    <th className="text-left py-3 px-4 w-36">Full Name</th>
+                    <th className="text-left py-3 px-4 w-48">Email</th>
+                    <th className="text-left py-3 px-4">Message</th>
                   </tr>
                 </thead>
                 <tbody>
                   {userdata.map((data, index)=>(
-                  <tr className="" key={index}>
-                      <td className="py-3 px-4">{data.mail}</td>
+                  <tr className="border-b border-gray-200" key={index}>
                       <td className="px-4">{data.name}</td>
-                      <td className="px-4">{data.password}</td>
+                      <td className="py-3 px-4">{data.email}</td>
+                      <td className="px-4 py-3">{data.message}</td>
                   </tr>
                   ))}
                 </tbody>
