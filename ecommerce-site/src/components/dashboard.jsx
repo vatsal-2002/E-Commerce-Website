@@ -6,7 +6,6 @@ import Editform from "./Editform";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -24,9 +23,10 @@ const AdminDashboard = () => {
   const [showpassword, setshowpassword] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
 
-  console.log(startDate)
+  console.log(startDate);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -192,30 +192,33 @@ const AdminDashboard = () => {
 
   const userdata = [
     {
-      name: 'John Dow',
-      email: 'john123@gmail.com',
-      message: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores, odio!',
-      date: '20/01/2025'
+      name: "John Dow",
+      email: "john123@gmail.com",
+      message:
+        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores, odio!",
+      date: "20/01/2025",
     },
     {
-      name: 'Leery Caul',
-      email: 'leery123@gmail.com',
-      message: 'amet consectetur adipisicing elit. Maiores, odio!',
-      date: '27/01/2025'
+      name: "Leery Caul",
+      email: "leery123@gmail.com",
+      message: "amet consectetur adipisicing elit. Maiores, odio!",
+      date: "27/01/2025",
     },
     {
-      name: 'Robert Nikosn',
-      email: 'robert@gmail.com',
-      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
-      date: '25/01/2025'
+      name: "Robert Nikosn",
+      email: "robert@gmail.com",
+      message:
+        "dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.",
+      date: "25/01/2025",
     },
     {
-      name: 'Jash Kumar',
-      email: 'jash123@gmail.com',
-      message: 'cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
-      date: '20/01/2025'
+      name: "Jash Kumar",
+      email: "jash123@gmail.com",
+      message:
+        "cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.",
+      date: "20/01/2025",
     },
-  ]
+  ];
 
   const categories = [
     "Fruit & Vegetables",
@@ -237,8 +240,8 @@ const AdminDashboard = () => {
             className="px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => {
               setSelectedCategory(null);
-              setSetting(false)
-              setshowuser(false)
+              setSetting(false);
+              setshowuser(false);
             }}
           >
             Dashboard
@@ -248,8 +251,8 @@ const AdminDashboard = () => {
             className="px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => {
               setSelectedCategory(null);
-              setSetting(false)
-              setshowuser(true)
+              setSetting(false);
+              setshowuser(true);
             }}
           >
             Users
@@ -286,9 +289,9 @@ const AdminDashboard = () => {
 
           <p
             onClick={() => {
-              setSetting(true); 
-              setSelectedCategory(null)
-              setshowuser(false)
+              setSetting(true);
+              setSelectedCategory(null);
+              setshowuser(false);
             }}
             className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
@@ -411,20 +414,40 @@ const AdminDashboard = () => {
             <div className="relative flex justify-between px-12">
               <p className="font-semibold text-2xl">User Details</p>
               <div className="">
-                <button  onClick={() => setShowCalendar(!showCalendar)} className={`${startDate === null ? 'block' : 'hidden'} px-3 bg-blue-200 active:bg-blue-300 py-1 rounded-lg`}>Filter</button>
-                <button onClick={() => {
-                  setShowCalendar(false)
-                  setStartDate(null)
-                }} className={`${startDate === null ? 'hidden' : 'block'} ml-[52px] px-3 bg-red-100 active:bg-red-200 py-1 rounded-lg`}>Cancel Filter</button>
-                <span className={`${startDate === null ? 'hidden' : 'block'} absolute text-[13px] pt-1`}>Filtered By Date: {startDate}</span>
-              </div>  
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className={`${
+                    startDate === null ? "block" : "hidden"
+                  } px-3 bg-blue-200 active:bg-blue-300 py-1 rounded-lg`}
+                >
+                  Filter
+                </button>
+                <button
+                  onClick={() => {
+                    setShowCalendar(false);
+                    setStartDate(null);
+                  }}
+                  className={`${
+                    startDate === null ? "hidden" : "block"
+                  } ml-[52px] px-3 bg-red-100 active:bg-red-200 py-1 rounded-lg`}
+                >
+                  Cancel Filter
+                </button>
+                <span
+                  className={`${
+                    startDate === null ? "hidden" : "block"
+                  } absolute text-[13px] pt-1`}
+                >
+                  Filtered By Date: {startDate}
+                </span>
+              </div>
               {showCalendar && (
                 <div className="absolute right-12 top-8 bg-white p-2 rounded shadow-md">
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => {
-                      setStartDate(date.toLocaleDateString("en-GB"))
-                      setShowCalendar(!showCalendar)
+                      setStartDate(date.toLocaleDateString("en-GB"));
+                      setShowCalendar(!showCalendar);
                     }}
                     inline
                   />
@@ -441,23 +464,23 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {startDate === null ? (
-                    userdata.map((data, index)=>(
-                    <tr className="border-b border-gray-200" key={index}>
-                        <td className="px-4">{data.name}</td>
-                        <td className="py-3 px-4">{data.email}</td>
-                        <td className="px-4 py-3">{data.message}</td>
-                    </tr>
-                    ))
-                  ) : (
-                    userdata.filter((data) => data.date === startDate).map((data, index) => (
-                      <tr className="border-b border-gray-200" key={index}>
-                        <td className="px-4">{data.name}</td>
-                        <td className="py-3 px-4">{data.email}</td>
-                        <td className="px-4 py-3">{data.message}</td>
-                      </tr>
-                    ))
-                  )}
+                  {startDate === null
+                    ? userdata.map((data, index) => (
+                        <tr className="border-b border-gray-200" key={index}>
+                          <td className="px-4">{data.name}</td>
+                          <td className="py-3 px-4">{data.email}</td>
+                          <td className="px-4 py-3">{data.message}</td>
+                        </tr>
+                      ))
+                    : userdata
+                        .filter((data) => data.date === startDate)
+                        .map((data, index) => (
+                          <tr className="border-b border-gray-200" key={index}>
+                            <td className="px-4">{data.name}</td>
+                            <td className="py-3 px-4">{data.email}</td>
+                            <td className="px-4 py-3">{data.message}</td>
+                          </tr>
+                        ))}
                 </tbody>
               </table>
             </div>
