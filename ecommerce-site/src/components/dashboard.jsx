@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProductTable from "./adminvegetable";
 import Editform from "./Editform";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const AdminDashboard = () => {
   const [isProductDropdownOpen, setProductDropdownOpen] = useState(false);
@@ -11,6 +14,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [apiEndpoint, setApiEndpoint] = useState("");
   const [setting, setSetting] = useState(false);
+  const [showuser, setshowuser] = useState(false);
   const [productCounts, setProductCounts] = useState({});
   const [editProduct, setEditProduct] = useState(false);
   const [email, setemail] = useState("");
@@ -18,8 +22,11 @@ const AdminDashboard = () => {
   const [password, setpassword] = useState("");
   const [confirmpassword, setconfirmpassword] = useState("");
   const [showpassword, setshowpassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
   const navigate = useNavigate();
+
+  console.log(startDate)
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -183,6 +190,33 @@ const AdminDashboard = () => {
     console.log("Deleting product", product);
   };
 
+  const userdata = [
+    {
+      name: 'John Dow',
+      email: 'john123@gmail.com',
+      message: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores, odio!',
+      date: '20/01/2025'
+    },
+    {
+      name: 'Leery Caul',
+      email: 'leery123@gmail.com',
+      message: 'amet consectetur adipisicing elit. Maiores, odio!',
+      date: '27/01/2025'
+    },
+    {
+      name: 'Robert Nikosn',
+      email: 'robert@gmail.com',
+      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '25/01/2025'
+    },
+    {
+      name: 'Jash Kumar',
+      email: 'jash123@gmail.com',
+      message: 'cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '20/01/2025'
+    },
+  ]
+
   const categories = [
     "Fruit & Vegetables",
     "Dairy, Bread & Eggs",
@@ -203,7 +237,8 @@ const AdminDashboard = () => {
             className="px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => {
               setSelectedCategory(null);
-              setSetting(false);
+              setSetting(false)
+              setshowuser(false)
             }}
           >
             Dashboard
@@ -213,7 +248,8 @@ const AdminDashboard = () => {
             className="px-4 py-2 text-white hover:bg-blue-700"
             onClick={() => {
               setSelectedCategory(null);
-              setSetting(false);
+              setSetting(false)
+              setshowuser(true)
             }}
           >
             Users
@@ -250,8 +286,9 @@ const AdminDashboard = () => {
 
           <p
             onClick={() => {
-              setSetting(true);
-              setSelectedCategory(null);
+              setSetting(true); 
+              setSelectedCategory(null)
+              setshowuser(false)
             }}
             className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
           >
@@ -367,6 +404,62 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        ) : showuser ? (
+          <div className="">
+            <div className="relative flex justify-between px-12">
+              <p className="font-semibold text-2xl">User Details</p>
+              <div className="">
+                <button  onClick={() => setShowCalendar(!showCalendar)} className={`${startDate === null ? 'block' : 'hidden'} px-3 bg-blue-200 active:bg-blue-300 py-1 rounded-lg`}>Filter</button>
+                <button onClick={() => {
+                  setShowCalendar(false)
+                  setStartDate(null)
+                }} className={`${startDate === null ? 'hidden' : 'block'} ml-[52px] px-3 bg-red-100 active:bg-red-200 py-1 rounded-lg`}>Cancel Filter</button>
+                <span className={`${startDate === null ? 'hidden' : 'block'} absolute text-[13px] pt-1`}>Filtered By Date: {startDate}</span>
+              </div>  
+              {showCalendar && (
+                <div className="absolute right-12 top-8 bg-white p-2 rounded shadow-md">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => {
+                      setStartDate(date.toLocaleDateString("en-GB"))
+                      setShowCalendar(!showCalendar)
+                    }}
+                    inline
+                  />
+                </div>
+              )}
+            </div>
+            <div className="py-4 px-6">
+              <table className="table-auto w-[90%]">
+                <thead>
+                  <tr className="border-b border-gray-400">
+                    <th className="text-left py-3 px-4 w-36">Full Name</th>
+                    <th className="text-left py-3 px-4 w-48">Email</th>
+                    <th className="text-left py-3 px-4">Message</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {startDate === null ? (
+                    userdata.map((data, index)=>(
+                    <tr className="border-b border-gray-200" key={index}>
+                        <td className="px-4">{data.name}</td>
+                        <td className="py-3 px-4">{data.email}</td>
+                        <td className="px-4 py-3">{data.message}</td>
+                    </tr>
+                    ))
+                  ) : (
+                    userdata.filter((data) => data.date === startDate).map((data, index) => (
+                      <tr className="border-b border-gray-200" key={index}>
+                        <td className="px-4">{data.name}</td>
+                        <td className="py-3 px-4">{data.email}</td>
+                        <td className="px-4 py-3">{data.message}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         ) : (
