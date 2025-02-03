@@ -24,6 +24,7 @@ const AdminDashboard = () => {
   const [startDate, setStartDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [userdata, setUserdata] = useState([]);
   const navigate = useNavigate();
 
   console.log(startDate);
@@ -40,6 +41,32 @@ const AdminDashboard = () => {
       setemailError("");
     }
   };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Please login first.");
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setUserdata(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (showuser) {
+      fetchUsers();
+    }
+  }, [showuser]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -189,36 +216,6 @@ const AdminDashboard = () => {
   const handleDelete = (product) => {
     console.log("Deleting product", product);
   };
-
-  const userdata = [
-    {
-      name: "John Dow",
-      email: "john123@gmail.com",
-      message:
-        "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores, odio!",
-      date: "20/01/2025",
-    },
-    {
-      name: "Leery Caul",
-      email: "leery123@gmail.com",
-      message: "amet consectetur adipisicing elit. Maiores, odio!",
-      date: "27/01/2025",
-    },
-    {
-      name: "Robert Nikosn",
-      email: "robert@gmail.com",
-      message:
-        "dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.",
-      date: "25/01/2025",
-    },
-    {
-      name: "Jash Kumar",
-      email: "jash123@gmail.com",
-      message:
-        "cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.",
-      date: "20/01/2025",
-    },
-  ];
 
   const categories = [
     "Fruit & Vegetables",
@@ -444,7 +441,7 @@ const AdminDashboard = () => {
               {showCalendar && (
                 <div className="absolute right-12 top-8 bg-white p-2 rounded shadow-md">
                   <DatePicker
-                    selected={startDate}
+                    selected={startDate ? new Date(startDate) : null}
                     onChange={(date) => {
                       setStartDate(date.toLocaleDateString("en-GB"));
                       setShowCalendar(!showCalendar);
