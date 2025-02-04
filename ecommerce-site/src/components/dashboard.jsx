@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
 import ProductTable from "./adminvegetable";
 import Editform from "./Editform";
@@ -24,6 +26,7 @@ const AdminDashboard = () => {
   const [showpassword, setshowpassword] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [showsidebar, setshowsidebar] = useState(false);
   const navigate = useNavigate();
 
   console.log(startDate)
@@ -174,11 +177,35 @@ const AdminDashboard = () => {
       date: '25/01/2025'
     },
     {
+      name: 'Robert Nikosn',
+      email: 'robert@gmail.com',
+      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '25/01/2025'
+    },
+    {
+      name: 'Robert Nikosn',
+      email: 'robert@gmail.com',
+      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '25/01/2025'
+    },
+    {
+      name: 'Robert Nikosn',
+      email: 'robert@gmail.com',
+      message: 'dolores quibusdam vel consectetur, cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '25/01/2025'
+    },
+    {
       name: 'Jash Kumar',
       email: 'jash123@gmail.com',
       message: 'cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
       date: '20/01/2025'
     },
+    {
+      name: 'Jash Kumar',
+      email: 'jash123@gmail.com',
+      message: 'cupiditate saepe laboriosam illum. Quisquam, nisi exercitationem.',
+      date: '20/01/2025'
+    }
   ]
 
   const categories = [
@@ -191,14 +218,16 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex h-screen">
-      <div className="w-64 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 text-white">
-        <div className="h-16 flex items-center justify-center border-b border-blue-700">
-          <h2 className="text-2xl font-semibold">Admin Dashboard</h2>
+
+      {/* sidebar for medium and big screens */}
+      <div className="hidden md:block w-52 lg:w-64">
+        <div className="h-16 flex items-center justify-center border-b border-gray-200">
+          <h2 className="text-xl lg:text-2xl font-semibold">Admin Dashboard</h2>
         </div>
-        <div className="flex flex-col mt-8">
+        <div className="flex flex-col pt-6">
           <Link
             to="/admin/dashboard"
-            className="px-4 py-2 text-white hover:bg-blue-700"
+            className="px-4 py-2 font-medium hover:bg-gray-200"
             onClick={() => {
               setSelectedCategory(null);
               setSetting(false)
@@ -209,7 +238,7 @@ const AdminDashboard = () => {
           </Link>
           <Link
             // to="/admin/users"
-            className="px-4 py-2 text-white hover:bg-blue-700"
+            className="px-4 py-2 font-medium hover:bg-gray-200"
             onClick={() => {
               setSelectedCategory(null);
               setSetting(false)
@@ -222,7 +251,7 @@ const AdminDashboard = () => {
           <div>
             <button
               onClick={toggleProductDropdown}
-              className="flex justify-between items-center w-full text-left px-4 py-2 text-white hover:bg-blue-700"
+              className="flex justify-between items-center w-full text-left px-4 py-2 font-medium hover:bg-gray-200"
             >
               Products
               <p
@@ -234,11 +263,11 @@ const AdminDashboard = () => {
               </p>
             </button>
             {isProductDropdownOpen && (
-              <div className="text-white pl-0">
+              <div className="pl-0">
                 {categories.map((category) => (
                   <p
                     key={category}
-                    className="py-2 pl-6 cursor-pointer hover:bg-blue-700"
+                    className="py-2 pl-6 cursor-pointer hover:bg-gray-200"
                     onClick={() => handleCategoryClick(category)}
                   >
                     {category}
@@ -254,7 +283,7 @@ const AdminDashboard = () => {
               setSelectedCategory(null)
               setshowuser(false)
             }}
-            className="cursor-pointer px-4 py-2 text-white hover:bg-blue-700"
+            className="cursor-pointer px-4 py-2 font-medium hover:bg-gray-200"
           >
             Settings
           </p>
@@ -262,15 +291,90 @@ const AdminDashboard = () => {
       </div>
 
       <div className="flex-1 bg-gray-100">
-        <div className="flex p-6 justify-between items-center">
+        <div className="relative flex pl-11 md:pl-5 p-5 justify-between items-center">
+
+          {/* sidebar for small screens */}
+          <div className="absolute left-0 block md:hidden">
+            <FontAwesomeIcon onClick={() => setshowsidebar(!showsidebar)} className="bg-green-500 text-white rounded-r-lg px-2 py-2" icon={faBars} size="xl"/>
+            <div className={`relative`}>
+              <div className={`absolute z-50 h-[calc(100vh-65px)] transition-all duration-300 bg-gray-300 ${showsidebar ? 'w-72 translate-x-0' : 'w-0 -translate-x-72'}`}>
+                <div className="flex flex-col py-6">
+                  <Link
+                    to="/admin/dashboard"
+                    className="px-4 py-2 font-medium hover:bg-gray-200"
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setSetting(false)
+                      setshowuser(false)
+                      setshowsidebar(false)
+                    }}
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    // to="/admin/users"
+                    className="px-4 py-2 font-medium hover:bg-gray-200"
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setSetting(false)
+                      setshowuser(true)
+                      setshowsidebar(false)
+                    }}
+                  >
+                    Users
+                  </Link>
+
+                  <div>
+                    <button
+                      onClick={toggleProductDropdown}
+                      className="flex justify-between items-center w-full text-left px-4 py-2 font-medium hover:bg-gray-200"
+                    >
+                      Products
+                      <p
+                        className={`${
+                          isProductDropdownOpen ? "rotate-45" : ""
+                        } font-bold text-xl transition-all my-auto`}
+                      >
+                        +
+                      </p>
+                    </button>
+                    {isProductDropdownOpen && (
+                      <div className="pl-0">
+                        {categories.map((category) => (
+                          <p
+                            key={category}
+                            className="py-2 pl-6 cursor-pointer hover:bg-gray-200"
+                            onClick={() => handleCategoryClick(category)}
+                          >
+                            {category}
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <p
+                    onClick={() => {
+                      setSetting(true); 
+                      setSelectedCategory(null)
+                      setshowuser(false)
+                      setshowsidebar(false)
+                    }}
+                    className="cursor-pointer px-4 py-2 font-medium hover:bg-gray-200"
+                  >
+                    Settings
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div>
-            <h2 className="text-3xl font-semibold">Welcome, Admin!</h2>
-            <p className="text-sm text-gray-600">
-              Here's your dashboard overview.
-            </p>
+            <h2 className="text-xl md:text-3xl font-semibold">Welcome, Admin!</h2>
+            <p className="text-sm text-gray-600">Here's your dashboard overview.</p>
           </div>
           <button
-            className="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 hover:bg-gradient-to-tl text-white py-2 px-4 rounded-lg"
+            className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg"
             onClick={() => {
               localStorage.removeItem("token");
               window.location.href = "/admin";
@@ -300,10 +404,10 @@ const AdminDashboard = () => {
         ) : setting ? (
           <div className="relative h-[calc(100vh-105px)] overflow-hidden">
             {/* <div className="absolute w-full right-96 h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-300"></div> */}
-            <div className="grid grid-cols-1 py-8 px-72">
+            <div className="flex justify-center items-center h-full">
               {/* <div className="relative z-10"></div> */}
               <div
-                className="relative z-10 pt-6 pb-8 px-10 text-white bg-gradient-to-br from-blue-500 via-blue-400 to-indigo-500 rounded-2xl"
+                className="relative z-10 pt-6 pb-8 px-10 bg-gradient-to-br from-gray-200 to-slate-300 rounded-2xl"
                 style={{ boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)" }}
               >
                 <p className="text-center text-2xl font-semibold">
@@ -313,7 +417,7 @@ const AdminDashboard = () => {
                   <div>
                     <p className="pb-1">Email</p>
                     <input
-                      className={`w-full p-2 rounded-md text-black focus:outline-none ${emailerror ? 'border-red-500' : ''}`}
+                      className={`w-full p-2 rounded-md text-black bg-transparent border border-black focus:outline-none ${emailerror ? 'border-red-500' : ''}`}
                       onChange={handleEmailChange} value={email}
                       placeholder="Enter Your Email"
                       type="email"
@@ -325,19 +429,19 @@ const AdminDashboard = () => {
                     <p className="pb-1">Password</p>
                     <div className="flex items-center">
                     <input
-                      className="w-full p-2 rounded-l-md text-black focus:outline-none"
+                      className="w-full p-2 rounded-l-md text-black bg-transparent border-l border-y border-black focus:outline-none"
                       onChange={(e) => setpassword(e.target.value)} value={password}
                       placeholder="Enter New Password"
                       type={`${showpassword ? 'text' : 'Password'}`}
                       required
                     />
-                    <p onClick={() => setshowpassword(!showpassword)} className="bg-white px-2 py-2.5 font-medium rounded-r-md text-[13px] cursor-pointer text-black">{showpassword ? 'Hide' : 'Show'}</p>
+                    <p onClick={() => setshowpassword(!showpassword)} className="px-2 py-[11px] font-medium border-y border-r border-black rounded-r-md text-[12px] cursor-pointer text-black">{showpassword ? 'Hide' : 'Show'}</p>
                     </div>
                   </div>
                   <div>
                     <p className="pb-1">Confirm Password</p>
                     <input
-                      className="w-full p-2 rounded-md text-black focus:outline-none"
+                      className="w-full p-2 rounded-md text-black bg-transparent border border-black focus:outline-none"
                       onChange={(e) => setconfirmpassword(e.target.value)} value={confirmpassword}
                       placeholder="Enter Confirm Password"
                       type="text"
@@ -345,7 +449,7 @@ const AdminDashboard = () => {
                     />
                   </div>
                   <div className="pt-7">
-                    <button onClick={() => submitdata()} className="w-full font-medium bg-blue-600 active:bg-blue-700 active:ring-1 ring-gray-700 py-2 rounded-lg">
+                    <button onClick={() => submitdata()} className="w-full font-medium bg-gray-400 active:bg-gray-500 active:ring-1 ring-gray-700 py-2 rounded-lg">
                       Submit
                     </button>
                   </div>
@@ -355,18 +459,18 @@ const AdminDashboard = () => {
           </div>
         ) : showuser ? (
           <div className="">
-            <div className="relative flex justify-between px-12">
-              <p className="font-semibold text-2xl">User Details</p>
+            <div className="relative flex justify-between px-3 md:pl-6 md:pr-7">
+              <p className="font-semibold text-xl md:text-2xl pb-4">User Details</p>
               <div className="">
-                <button  onClick={() => setShowCalendar(!showCalendar)} className={`${startDate === null ? 'block' : 'hidden'} px-3 bg-blue-200 active:bg-blue-300 py-1 rounded-lg`}>Filter</button>
+                <button  onClick={() => setShowCalendar(!showCalendar)} className={`${startDate === null ? 'block' : 'hidden'} px-3 bg-gray-100 text-blue-600 py-1 rounded-lg`}>Filter</button>
                 <button onClick={() => {
                   setShowCalendar(false)
                   setStartDate(null)
-                }} className={`${startDate === null ? 'hidden' : 'block'} ml-[52px] px-3 bg-red-100 active:bg-red-200 py-1 rounded-lg`}>Cancel Filter</button>
-                <span className={`${startDate === null ? 'hidden' : 'block'} absolute text-[13px] pt-1`}>Filtered By Date: {startDate}</span>
+                }} className={`${startDate === null ? 'hidden' : 'block'} ml-[65px] pl-3 bg-gray-100 text-blue-600 py-1 rounded-lg`}>Cancel Filter</button>
+                <span className={`${startDate === null ? 'hidden' : 'block'} absolute text-[13px] pt-1 pr-2`}>Filtered By Date: {startDate}</span>
               </div>  
               {showCalendar && (
-                <div className="absolute right-12 top-8 bg-white p-2 rounded shadow-md">
+                <div className="absolute right-6 md:right-12 top-8 bg-white p-2 rounded shadow-md">
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => {
@@ -378,16 +482,16 @@ const AdminDashboard = () => {
                 </div>
               )}
             </div>
-            <div className="py-4 px-6">
-              <table className="table-auto w-[90%]">
+            <div className="md:px-6 w-[calc(100vw-0px)] md:w-auto h-[calc(100vh-140px)] md:h-[calc(100vh-180px)] overflow-auto scrollbar-thin">
+              <table className="table-auto">
                 <thead>
                   <tr className="border-b border-gray-400">
-                    <th className="text-left py-3 px-4 w-36">Full Name</th>
-                    <th className="text-left py-3 px-4 w-48">Email</th>
-                    <th className="text-left py-3 px-4">Message</th>
+                    <th className="text-left py-3 px-4 md:w-36">Full Name</th>
+                    <th className="text-left py-3 px-4 md:w-48">Email</th>
+                    <th className="text-left py-3 px-4 md:w-52 lg:w-[calc(100vw-630px)]">Message</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="">
                   {startDate === null ? (
                     userdata.map((data, index)=>(
                     <tr className="border-b border-gray-200" key={index}>
@@ -411,13 +515,13 @@ const AdminDashboard = () => {
           </div>
         ) : (
           <>
-            <p className="font-semibold text-2xl py-5 p-4">
+            <p className="font-semibold text-2xl pb-5 px-4">
               Product Categories
             </p>
-            <div className="grid grid-cols-3 gap-3 p-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 p-4">
               {categories.map((category) => (
                 <div
-                  className="hover:scale-105 transition-all bg-gradient-to-br from-purple-500 to-indigo-500 text-white p-4 flex flex-col gap-3 justify-between rounded-lg"
+                  className="hover:scale-105 transition-all bg-gradient-to-br from-gray-200 to-slate-300 p-4 flex flex-col gap-3 justify-between rounded-lg"
                   key={category}
                 >
                   <p className="font-semibold text-xl">{category}</p>
