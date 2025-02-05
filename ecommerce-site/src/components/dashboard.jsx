@@ -27,6 +27,8 @@ const AdminDashboard = () => {
   const [startDate, setStartDate] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showsidebar, setshowsidebar] = useState(false);
+  const [openCategory, setOpenCategory] = useState(null);
+  const [openSubcategory, setOpenSubcategory] = useState(null);
   const navigate = useNavigate();
 
   console.log(startDate)
@@ -117,10 +119,6 @@ const AdminDashboard = () => {
     console.log(confirmpassword)
   }
 
-  const toggleProductDropdown = () => {
-    setProductDropdownOpen((prevState) => !prevState);
-  };
-
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
 
@@ -208,13 +206,25 @@ const AdminDashboard = () => {
     }
   ]
 
-  const categories = [
-    "Fruit & Vegetables",
-    "Dairy, Bread & Eggs",
-    "Chicken, Meat & Fish",
-    "Pet Food",
-    "Cold Drinks & Juices",
-  ];
+  const filtereduserdata = userdata.filter((data) => data.date === startDate)
+
+  const categories = {
+    "Electronics" : {
+      "Audio devices" : ['Earbuds', 'Headphones', 'Speakers'],
+      "Beauty & Grooming" : ['Body Massagers','Epilators & Trimmers']
+    },
+    "Dairy, Bread & Eggs" : {},
+    "Chicken, Meat & Fish" : {},
+    "Pet Food" : {},
+    "Cold Drinks & Juices" : {},
+  };
+  // const categories = [
+  //   "Fruit & Vegetables",
+  //   "Dairy, Bread & Eggs",
+  //   "Chicken, Meat & Fish",
+  //   "Pet Food",
+  //   "Cold Drinks & Juices",
+  // ];
 
   return (
     <div className="flex h-screen">
@@ -250,10 +260,10 @@ const AdminDashboard = () => {
 
           <div>
             <button
-              onClick={toggleProductDropdown}
+              onClick={() => setProductDropdownOpen(!isProductDropdownOpen)}
               className="flex justify-between items-center w-full text-left px-4 py-2 font-medium hover:bg-gray-200"
             >
-              Products
+              Categories
               <p
                 className={`${
                   isProductDropdownOpen ? "rotate-45" : ""
@@ -264,12 +274,14 @@ const AdminDashboard = () => {
             </button>
             {isProductDropdownOpen && (
               <div className="pl-0">
-                {categories.map((category) => (
+                {Object.keys(categories).map((category) => (
                   <p
                     key={category}
-                    className="py-2 pl-6 cursor-pointer hover:bg-gray-200"
-                    onClick={() => handleCategoryClick(category)}
-                  >
+                    className="py-2 pl-6 font-medium cursor-pointer hover:bg-gray-200"
+                    onClick={() => {
+                      handleCategoryClick(category)
+                      setOpenCategory(openCategory === category ? null : category)
+                    }}>
                     {category}
                   </p>
                 ))}
@@ -326,7 +338,7 @@ const AdminDashboard = () => {
 
                   <div>
                     <button
-                      onClick={toggleProductDropdown}
+                      onClick={() => setProductDropdownOpen(!isProductDropdownOpen)}
                       className="flex justify-between items-center w-full text-left px-4 py-2 font-medium hover:bg-gray-200"
                     >
                       Products
@@ -368,6 +380,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
+          {/* sidebar for small screens end*/}
 
           <div>
             <h2 className="text-xl md:text-3xl font-semibold">Welcome, Admin!</h2>
@@ -483,7 +496,7 @@ const AdminDashboard = () => {
               )}
             </div>
             <div className="md:px-6 w-[calc(100vw-0px)] md:w-auto h-[calc(100vh-140px)] md:h-[calc(100vh-180px)] overflow-auto scrollbar-thin">
-              <table className="table-auto">
+              <table className="w-full table-auto">
                 <thead>
                   <tr className="border-b border-gray-400">
                     <th className="text-left py-3 px-4 md:w-36">Full Name</th>
@@ -500,14 +513,20 @@ const AdminDashboard = () => {
                         <td className="px-4 py-3">{data.message}</td>
                     </tr>
                     ))
-                  ) : (
-                    userdata.filter((data) => data.date === startDate).map((data, index) => (
+                  ) : filtereduserdata && filtereduserdata.length > 0 ? (
+                    filtereduserdata.map((data, index) => (
                       <tr className="border-b border-gray-200" key={index}>
                         <td className="px-4">{data.name}</td>
                         <td className="py-3 px-4">{data.email}</td>
                         <td className="px-4 py-3">{data.message}</td>
                       </tr>
                     ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="font-medium text-center py-4">
+                        No data found
+                      </td>
+                    </tr>
                   )}
                 </tbody>
               </table>
